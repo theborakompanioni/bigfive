@@ -11,6 +11,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Profile;
 import org.tbk.bigfive.model.Goal;
 import org.tbk.bigfive.model.GoalRepository;
+import org.tbk.bigfive.model.User;
+import org.tbk.bigfive.model.UserRepository;
 
 import javax.sql.DataSource;
 import java.util.Arrays;
@@ -47,31 +49,21 @@ public class Application {
     }
 
     @Bean
-    public CommandLineRunner demo(GoalRepository repository) {
+    public CommandLineRunner demo(UserRepository userRepository, GoalRepository goalRepository) {
         return (args) -> {
-            repository.save(new Goal("Jack", "Bauer"));
-            repository.save(new Goal("Chloe", "O'Brian"));
-            repository.save(new Goal("Kim", "Bauer"));
-            repository.save(new Goal("David", "Palmer"));
-            repository.save(new Goal("Michelle", "Dessler"));
+            User user = new User("test");
+            userRepository.save(user);
+
+            goalRepository.save(new Goal(user, "Goal1", "Description1"));
+            goalRepository.save(new Goal(user, "Goal2", "Description2"));
+            goalRepository.save(new Goal(user, "Goal3", "Description3"));
+            goalRepository.save(new Goal(user, "Goal4", "Description4"));
+            goalRepository.save(new Goal(user, "GOal5", "Description5"));
 
             log.info("Goals found with findAll():");
             log.info("-------------------------------");
-            for (Goal customer : repository.findAll()) {
-                log.info(customer.toString());
-            }
-            log.info("");
-
-            Goal customer = repository.findOne(1L);
-            log.info("Goal found with findOne(1L):");
-            log.info("--------------------------------");
-            log.info(customer.toString());
-            log.info("");
-
-            log.info("Goal found with findByName('Chloe'):");
-            log.info("--------------------------------------------");
-            for (Goal bauer : repository.findByName("Chloe")) {
-                log.info(bauer.toString());
+            for (Goal goal : goalRepository.findAll()) {
+                log.info(goal.toString());
             }
             log.info("");
         };

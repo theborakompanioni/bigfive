@@ -1,30 +1,28 @@
 package org.tbk.bigfive.model;
 
 import javax.persistence.*;
+import java.util.List;
 
 import static java.util.Objects.requireNonNull;
 
 @Entity
-@Table(name = "goal")
-public class Goal {
+@Table(name = "user")
+public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @ManyToOne
-    @JoinColumn(name = "user_id")
-    private User user;
     private String name;
-    private String description;
 
-    protected Goal() {
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<Goal> goals;
+
+    protected User() {
     }
 
-    public Goal(User user, String name, String description) {
-        this.user = user;
+    public User(String name) {
         this.name = requireNonNull(name);
-        this.description = description;
     }
 
     public String getName() {
@@ -34,8 +32,8 @@ public class Goal {
     @Override
     public String toString() {
         return String.format(
-                "Goal[id=%d, name='%s', user=%s]",
-                id, name, user);
+                "User[id=%d, name='%s']",
+                id, name);
     }
 
 }

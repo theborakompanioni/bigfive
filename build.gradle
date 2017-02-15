@@ -14,9 +14,37 @@ apply plugin: 'org.springframework.boot'
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
+import org.gradle.api.tasks.testing.logging.TestExceptionFormat
+import org.gradle.api.tasks.testing.logging.TestLogEvent
+
+tasks.withType(Test) {
+    testLogging {
+        // set options for log level LIFECYCLE
+        events TestLogEvent.STARTED, TestLogEvent.PASSED, TestLogEvent.SKIPPED, TestLogEvent.FAILED
+        showExceptions true
+        exceptionFormat TestExceptionFormat.FULL
+        showCauses true
+        showStackTraces true
+
+        afterSuite { desc, result ->
+            if (!desc.parent) { // will match the outermost suite
+                def output = "Results: ${result.resultType} (${result.testCount} tests, ${result.successfulTestCount} successes, ${result.failedTestCount} failures, ${result.skippedTestCount} skipped)"
+                def startItem = '|  ', endItem = '  |'
+                def repeatLength = startItem.length() + output.length() + endItem.length()
+                println('\n' + ('-' * repeatLength) + '\n' + startItem + output + endItem + '\n' + ('-' * repeatLength))
+            }
+        }
+    }
+}
+
 sourceSets {
     main.java.srcDir "src/main/java"
     test.java.srcDir "src/test/java"
+}
+
+test {
+    // * enable on demand
+    // testLogging.showStandardStreams = true
 }
 
 jar {
@@ -55,5 +83,6 @@ dependencies {
 
     testCompile("junit:junit")
     testCompile("org.springframework.boot:spring-boot-starter-test")
-    testCompile("com.h2database:h2")
+    // temporarily disabled to focus on sqlite
+    //testCompile("com.h2database:h2")
 }

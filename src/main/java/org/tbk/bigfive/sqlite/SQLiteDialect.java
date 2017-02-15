@@ -1,13 +1,12 @@
 package org.tbk.bigfive.sqlite;
 
-import java.sql.Types;
-
 import org.hibernate.dialect.Dialect;
-import org.hibernate.dialect.function.StandardSQLFunction;
 import org.hibernate.dialect.function.SQLFunctionTemplate;
+import org.hibernate.dialect.function.StandardSQLFunction;
 import org.hibernate.dialect.function.VarArgsSQLFunction;
-import org.hibernate.Hibernate;
 import org.hibernate.type.StringType;
+
+import java.sql.Types;
 
 public class SQLiteDialect extends Dialect {
     public SQLiteDialect() {
@@ -35,34 +34,20 @@ public class SQLiteDialect extends Dialect {
         registerColumnType(Types.CLOB, "clob");
         registerColumnType(Types.BOOLEAN, "integer");
 
-        registerFunction( "concat", new VarArgsSQLFunction(StringType.INSTANCE, "", "||", "") );
-        registerFunction( "mod", new SQLFunctionTemplate( StringType.INSTANCE, "?1 % ?2" ) );
-        registerFunction( "substr", new StandardSQLFunction("substr", StringType.INSTANCE) );
-        registerFunction( "substring", new StandardSQLFunction( "substr", StringType.INSTANCE) );
+        registerFunction("concat", new VarArgsSQLFunction(StringType.INSTANCE, "", "||", ""));
+        registerFunction("mod", new SQLFunctionTemplate(StringType.INSTANCE, "?1 % ?2"));
+        registerFunction("substr", new StandardSQLFunction("substr", StringType.INSTANCE));
+        registerFunction("substring", new StandardSQLFunction("substr", StringType.INSTANCE));
     }
 
     public boolean supportsIdentityColumns() {
         return true;
     }
 
-  /*
-  public boolean supportsInsertSelectIdentity() {
-    return true; // As specify in NHibernate dialect
-  }
-  */
-
     public boolean hasDataTypeInIdentityColumn() {
         return false; // As specify in NHibernate dialect
     }
 
-  /*
-  public String appendIdentitySelectToInsert(String insertString) {
-    return new StringBuffer(insertString.length()+30). // As specify in NHibernate dialect
-      append(insertString).
-      append("; ").append(getIdentitySelectString()).
-      toString();
-  }
-  */
 
     public String getIdentityColumnString() {
         // return "integer primary key autoincrement";
@@ -78,7 +63,7 @@ public class SQLiteDialect extends Dialect {
     }
 
     protected String getLimitString(String query, boolean hasOffset) {
-        return new StringBuffer(query.length()+20).
+        return new StringBuffer(query.length() + 20).
                 append(query).
                 append(hasOffset ? " limit ? offset ?" : " limit ?").
                 toString();
