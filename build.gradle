@@ -1,0 +1,59 @@
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:1.5.1.RELEASE")
+    }
+}
+
+apply plugin: 'java'
+apply plugin: 'idea'
+apply plugin: 'org.springframework.boot'
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+sourceSets {
+    main.java.srcDir "src/main/java"
+    test.java.srcDir "src/test/java"
+}
+
+jar {
+    //manifest.attributes "Main-Class": "org.tbk.bigfive.Application"
+
+    baseName = 'tbk-bigfive'
+    version = '0.0.1-SNAPSHOT'
+}
+
+bootRepackage {
+    mainClass = 'org.tbk.bigfive.Application'
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    // tag::jetty[]
+    compile("org.springframework.boot:spring-boot-starter-web") {
+        exclude module: "spring-boot-starter-tomcat"
+    }
+    compile("org.springframework.boot:spring-boot-starter-jetty")
+    // end::jetty[]
+
+    compile("org.springframework.boot:spring-boot-starter-data-jpa")
+    compile("com.zaxxer:HikariCP:2.6.0") {
+        exclude group: "org.slf4j", module: "slf4j-api"
+    }
+    compile("org.xerial:sqlite-jdbc:3.16.1")
+
+    compile("io.reactivex.rxjava2:rxjava:2.0.5")
+
+    compile("org.springframework.boot:spring-boot-starter-actuator")
+    compile("org.springframework.boot:spring-boot-devtools")
+
+    testCompile("junit:junit")
+    testCompile("org.springframework.boot:spring-boot-starter-test")
+    testCompile("com.h2database:h2")
+}
