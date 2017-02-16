@@ -10,12 +10,11 @@ import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabas
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Import;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.tbk.bigfive.config.TestDbConfig;
 
+import java.util.Collections;
 import java.util.List;
 
 import static org.hamcrest.Matchers.*;
@@ -48,12 +47,13 @@ public class GoalRepositoryTest {
 
     @Before
     public void setUp() {
-        this.user1 = new User("test");
-        this.user2 = new User("test2");
+        this.user1 = new User("test", "password1", Collections.emptyList());
+        this.user2 = new User("test2", "password2", Collections.emptyList());
 
         final List<User> users = Lists.newArrayList(user1, user2);
         userRepository.save(users);
         this.users = users;
+
 
         this.goal1 = new Goal(user1, "goal1", "description1");
         this.goal2 = new Goal(user2, "goal2", "description2");
@@ -61,6 +61,9 @@ public class GoalRepositoryTest {
         final List<Goal> goals = Lists.newArrayList(goal1, goal2);
         goalRepository.save(goals);
         this.goals = goals;
+
+        userRepository.flush();
+        goalRepository.flush();
     }
 
     @Test
@@ -72,9 +75,8 @@ public class GoalRepositoryTest {
 
     @Test
     public void findByName() throws Exception {
-        final Page<Goal> findAll = goalRepository.findAll(new PageRequest(0, 10));
-        final long totalElements = findAll.getTotalElements();
-        assertThat(totalElements, is((long) goals.size()));
+        final List<Goal> byUser = goalRepository.findByName(goal1.getName());
+        assertThat(byUser, hasSize(greaterThan(0)));
     }
 
     @Test

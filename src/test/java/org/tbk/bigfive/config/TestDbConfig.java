@@ -4,6 +4,7 @@ import org.springframework.boot.autoconfigure.jdbc.DataSourceBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
+import org.springframework.test.context.TestPropertySource;
 
 import javax.sql.DataSource;
 import java.net.URISyntaxException;
@@ -37,8 +38,10 @@ public class TestDbConfig {
         Stackoverflow description of what each hibernate.hbm2ddl.auto param does
          */
         hibernateProperties.setProperty("hibernate.hbm2ddl.auto", "create-drop");
+        //hibernateProperties.setProperty("hibernate.hbm2ddl.auto", "update");
         hibernateProperties.setProperty("hibernate.dialect", org.tbk.bigfive.sqlite.SQLiteDialect.class.getName());
         hibernateProperties.setProperty("hibernate.show_sql", "true");
+        hibernateProperties.setProperty("hibernate.cache.use_query_cache", "false");
 
         return hibernateProperties;
     }

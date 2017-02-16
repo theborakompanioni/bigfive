@@ -25,13 +25,17 @@ public class FakeUserDetailsService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         final List<org.tbk.bigfive.model.User> byName = userRepository.findByName(username);
-        
+
         return byName.stream().findFirst()
-                .map(user -> User.withUsername(username)
-                        .password("any")
-                        .authorities("create_goal", "edit_goal")
-                        .disabled(false)
-                        .build())
+                .map(user -> toUserDetails(user))
                 .orElseThrow(() -> new UsernameNotFoundException("user not found"));
+    }
+
+    private UserDetails toUserDetails(org.tbk.bigfive.model.User user) {
+        return User.withUsername(user.getName())
+                .password("any")
+                .authorities("create_goal", "edit_goal")
+                .disabled(false)
+                .build();
     }
 }

@@ -16,6 +16,7 @@ import org.tbk.bigfive.model.UserRepository;
 
 import javax.sql.DataSource;
 import java.util.Arrays;
+import java.util.Collections;
 
 @SpringBootApplication
 public class Application {
@@ -51,7 +52,7 @@ public class Application {
     @Bean
     public CommandLineRunner demo(UserRepository userRepository, GoalRepository goalRepository) {
         return (args) -> {
-            User user = new User("test");
+            User user = new User("test", "", Collections.emptyList());
             userRepository.save(user);
 
             goalRepository.save(new Goal(user, "Goal1", "Description1"));

@@ -1,6 +1,10 @@
 package org.tbk.bigfive.model;
 
+import com.google.common.collect.Lists;
+
 import javax.persistence.*;
+import java.util.List;
+import java.util.Optional;
 
 import static java.util.Objects.requireNonNull;
 
@@ -10,25 +14,40 @@ public class Goal {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "goal_id", columnDefinition = "bigint")
     private Long id;
 
-    @ManyToOne
-    @JoinColumn(name = "user_id")
-    private User user;
+    @Column(name = "name")
     private String name;
+
+    @Column(name = "desc")
     private String description;
+
+    @JoinTable(name = "user_goals", joinColumns = {
+            @JoinColumn(name = "goal_id", referencedColumnName = "goal_id", columnDefinition = "integer")
+    }, inverseJoinColumns = {
+            @JoinColumn(name = "user_id", referencedColumnName = "user_id", columnDefinition = "integer")
+    })
+    @ManyToMany(fetch = FetchType.LAZY)
+    private List<User> user;
 
     protected Goal() {
     }
 
     public Goal(User user, String name, String description) {
-        this.user = user;
+        this.user = Lists.newArrayList(user);
         this.name = requireNonNull(name);
         this.description = description;
     }
 
     public String getName() {
         return name;
+    }
+
+    public User getUser() {
+        return Optional.ofNullable(user)
+                .flatMap(user -> user.stream().findFirst())
+                .orElse(null);
     }
 
     @Override
