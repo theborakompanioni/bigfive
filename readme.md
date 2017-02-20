@@ -23,7 +23,15 @@ $ curl localhost:8080/health
 ```
 
 ### Docker
+#### Build
 ```
 $ docker build -t tbk/bigfiveforlife .
+```
+#### Run
+```
 $ docker run -t -i -p 8080:8080 tbk/bigfiveforlife
+```
+or
+```
+$ docker-compose up
 ```
