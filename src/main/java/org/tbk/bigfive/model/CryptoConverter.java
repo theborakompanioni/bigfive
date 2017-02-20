@@ -18,7 +18,7 @@ public class CryptoConverter implements AttributeConverter<String, String> {
         if (val == null) {
             return null;
         }
-        
+
         try {
             Cipher c = Cipher.getInstance(ALGORITHM);
             c.init(Cipher.ENCRYPT_MODE, key);

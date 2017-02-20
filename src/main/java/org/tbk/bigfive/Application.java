@@ -10,14 +10,10 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Profile;
 import org.springframework.transaction.annotation.Transactional;
-import org.tbk.bigfive.model.Goal;
-import org.tbk.bigfive.model.GoalRepository;
-import org.tbk.bigfive.model.User;
-import org.tbk.bigfive.model.UserRepository;
+import org.tbk.bigfive.demo.DemoService;
 
 import javax.sql.DataSource;
 import java.util.Arrays;
-import java.util.Collections;
 
 @SpringBootApplication
 public class Application {
@@ -30,7 +26,7 @@ public class Application {
     @Bean
     public DataSource dataSource() {
         DataSourceBuilder dataSourceBuilder = DataSourceBuilder.create();
-        dataSourceBuilder.driverClassName("org.sqlite.JDBC");
+        dataSourceBuilder.driverClassName(org.sqlite.JDBC.class.getName());
         dataSourceBuilder.url("jdbc:sqlite:bigfive.db");
         return dataSourceBuilder.build();
     }
@@ -51,42 +47,13 @@ public class Application {
     }
 
     @Bean
-    public CommandLineRunner demo(UserRepository userRepository, GoalRepository goalRepository) {
+    public CommandLineRunner demo(DemoService demoService) {
         return new CommandLineRunner() {
-
-            private User createDemoUser() {
-                User demoUser = new User("demo", "demo", Collections.emptyList());
-
-                userRepository.save(demoUser);
-                log.info("Created demo user: {}", demoUser);
-
-                goalRepository.save(new Goal(demoUser, "Goal1", "Description1"));
-                goalRepository.save(new Goal(demoUser, "Goal2", "Description2"));
-                goalRepository.save(new Goal(demoUser, "Goal3", "Description3"));
-                goalRepository.save(new Goal(demoUser, "Goal4", "Description4"));
-                goalRepository.save(new Goal(demoUser, "GOal5", "Description5"));
-
-                return demoUser;
-            }
-
-            private User getOrCreateDemoUser() {
-                return userRepository.findByName("demo")
-                        .stream()
-                        .findFirst()
-                        .orElseGet(this::createDemoUser);
-            }
 
             @Override
             @Transactional
             public void run(String... args) throws Exception {
-                User demoUser = getOrCreateDemoUser();
-
-                log.info("Goals of demo user:");
-                log.info("-------------------------------");
-                goalRepository.findByUser(demoUser).stream()
-                        .map(Goal::toString)
-                        .forEach(log::info);
-                log.info("");
+                demoService.printGoalsOfDemoUser();
             }
         };
     }

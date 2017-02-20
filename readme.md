@@ -24,6 +24,6 @@ $ curl localhost:8080/health
 
 ### Docker
 ```
-$ docker build -t tbk/tbk-bigfive .
-$ docker run -t -i -p 8080:8080 tbk/tbk-bigfive
+$ docker build -t tbk/bigfiveforlife .
+$ docker run -t -i -p 8080:8080 tbk/bigfiveforlife
 ```
