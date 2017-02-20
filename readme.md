@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/theborakompanioni/bigfive.svg?branch=master)](https://travis-ci.org/theborakompanioni/bigfive)
+
 big five
 ========
 - gradle
