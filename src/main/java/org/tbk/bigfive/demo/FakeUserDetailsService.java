@@ -33,7 +33,7 @@ public class FakeUserDetailsService implements UserDetailsService {
 
     private UserDetails toUserDetails(org.tbk.bigfive.model.User user) {
         return User.withUsername(user.getName())
-                .password("any")
+                .password(user.getPassword())
                 .authorities("create_goal", "edit_goal")
                 .disabled(false)
                 .build();

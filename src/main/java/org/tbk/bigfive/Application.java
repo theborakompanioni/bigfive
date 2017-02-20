@@ -53,23 +53,39 @@ public class Application {
     @Bean
     public CommandLineRunner demo(UserRepository userRepository, GoalRepository goalRepository) {
         return new CommandLineRunner() {
+
+            private User createDemoUser() {
+                User demoUser = new User("demo", "demo", Collections.emptyList());
+
+                userRepository.save(demoUser);
+                log.info("Created demo user: {}", demoUser);
+
+                goalRepository.save(new Goal(demoUser, "Goal1", "Description1"));
+                goalRepository.save(new Goal(demoUser, "Goal2", "Description2"));
+                goalRepository.save(new Goal(demoUser, "Goal3", "Description3"));
+                goalRepository.save(new Goal(demoUser, "Goal4", "Description4"));
+                goalRepository.save(new Goal(demoUser, "GOal5", "Description5"));
+
+                return demoUser;
+            }
+
+            private User getOrCreateDemoUser() {
+                return userRepository.findByName("demo")
+                        .stream()
+                        .findFirst()
+                        .orElseGet(this::createDemoUser);
+            }
+
             @Override
             @Transactional
             public void run(String... args) throws Exception {
-                User user = new User("test", "", Collections.emptyList());
-                userRepository.save(user);
+                User demoUser = getOrCreateDemoUser();
 
-                goalRepository.save(new Goal(user, "Goal1", "Description1"));
-                goalRepository.save(new Goal(user, "Goal2", "Description2"));
-                goalRepository.save(new Goal(user, "Goal3", "Description3"));
-                goalRepository.save(new Goal(user, "Goal4", "Description4"));
-                goalRepository.save(new Goal(user, "GOal5", "Description5"));
-
-                log.info("Goals found with findAll():");
+                log.info("Goals of demo user:");
                 log.info("-------------------------------");
-                for (Goal goal : goalRepository.findAll()) {
-                    log.info(goal.toString());
-                }
+                goalRepository.findByUser(demoUser).stream()
+                        .map(Goal::toString)
+                        .forEach(log::info);
                 log.info("");
             }
         };
