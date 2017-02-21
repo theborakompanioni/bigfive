@@ -54,6 +54,13 @@ jar {
     version = '0.0.1-SNAPSHOT'
 }
 
+task copyIonicAppToStatic(type: Copy) {
+    from 'src/main/ionic/www'
+    into 'src/main/resources/static/apps/bigfive'
+}
+assemble.dependsOn copyIonicAppToStatic
+
+
 bootRepackage {
     mainClass = 'org.tbk.bigfive.Application'
 }

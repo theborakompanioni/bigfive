@@ -1,6 +1,11 @@
 
 # Created by https://www.gitignore.io/api/java,gradle,intellij
-### Project specific
+######################
+# Project Specific
+######################
+/src/main/webapp/dist
+app.pid
+app.port
 *.db
 
 ### Intellij ###

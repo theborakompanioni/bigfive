@@ -1,5 +1,6 @@
 package org.tbk.bigfive.demo;
 
+import com.google.common.collect.Lists;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -7,8 +8,6 @@ import org.tbk.bigfive.model.Goal;
 import org.tbk.bigfive.model.GoalRepository;
 import org.tbk.bigfive.model.User;
 import org.tbk.bigfive.model.UserRepository;
-
-import java.util.Collections;
 
 import static java.util.Objects.requireNonNull;
 
@@ -35,7 +34,7 @@ public class DemoService {
                 .forEach(log::info);
         log.info("");
     }
-    
+
     public User getOrCreateDemoUser() {
         return userRepository.findByName("demo")
                 .stream()
@@ -44,7 +43,7 @@ public class DemoService {
     }
 
     private User createDemoUser() {
-        User demoUser = new User("demo", passwordEncoder.encode("demo"), Collections.emptyList());
+        User demoUser = new User("demo", passwordEncoder.encode("demo"), Lists.newArrayList("ROLE_ADMIN", "ROLE_USER"));
 
         userRepository.save(demoUser);
         log.info("Created demo user: {}", demoUser);

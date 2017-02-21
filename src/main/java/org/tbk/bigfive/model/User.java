@@ -24,16 +24,22 @@ public class User {
     @Convert(converter = CryptoConverter.class)
     private String password;
 
-    @ManyToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    private List<Goal> goals;
+    @Column(name = "enabled")
+    private boolean enabled = true;
+
+    @ManyToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Goal> goals = Collections.emptyList();
+
+    @ElementCollection(fetch = FetchType.EAGER)
+    private List<String> authorities = Collections.emptyList();
 
     protected User() {
     }
 
-    public User(String name, String password, List<Goal> goals) {
+    public User(String name, String password, List<String> authorities) {
         this.name = requireNonNull(name);
-        this.password = password;
-        this.goals = goals;
+        this.password = requireNonNull(password);
+        this.authorities = requireNonNull(authorities);
     }
 
     public Long getId() {
@@ -63,8 +69,17 @@ public class User {
         this.goals = goals;
     }
 
+    public boolean isEnabled() {
+        return enabled;
+    }
+
+    public List<String> getAuthorities() {
+        return authorities;
+    }
+
     @Override
     public String toString() {
         return String.format("User[id=%d, name='%s']", id, name);
     }
+
 }

@@ -40,9 +40,12 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
+        String loginPage = "/login.html";
+
         http.authorizeRequests()
-                // Permit access for all to login REST service
-                .antMatchers("/api/users/login").permitAll()
+                .antMatchers(loginPage).permitAll()
+                .antMatchers("/admin/**").hasRole("ADMIN")
+                .antMatchers("/user/**").hasRole("USER")
                 // All other requests require authentication
                 .anyRequest().fullyAuthenticated().and()
                 .httpBasic().and()
