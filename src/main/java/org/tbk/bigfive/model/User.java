@@ -1,11 +1,10 @@
 package org.tbk.bigfive.model;
 
-import io.reactivex.Observable;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import javax.persistence.*;
 import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
 
 import static java.util.Objects.requireNonNull;
 
@@ -20,6 +19,7 @@ public class User {
     @Column(name = "name")
     private String name;
 
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     @Column(name = "password")
     @Convert(converter = CryptoConverter.class)
     private String password;
@@ -30,14 +30,15 @@ public class User {
     @ManyToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Goal> goals = Collections.emptyList();
 
-    @JoinTable(name = "user_lists", joinColumns = {
-            @JoinColumn(name = "user_id", referencedColumnName = "user_id", columnDefinition = "integer")
+    /*@JoinTable(name = "user_lists", joinColumns = {
+            @JoinColumn(name = "user_id", referencedColumnName = "user_id", columnDefinition = "bigint")
     }, inverseJoinColumns = {
-            @JoinColumn(name = "list_id", referencedColumnName = "list_id", columnDefinition = "integer")
-    })
-    @ManyToMany(fetch = FetchType.LAZY)
+            @JoinColumn(name = "list_id", referencedColumnName = "list_id", columnDefinition = "bigint")
+    })*/
+    @OneToMany(fetch=FetchType.LAZY, cascade = CascadeType.ALL, mappedBy="owner")
     private List<BigFiveList> lists = Collections.emptyList();
 
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     @ElementCollection(fetch = FetchType.EAGER)
     private List<String> authorities = Collections.emptyList();
 
@@ -64,13 +65,6 @@ public class User {
 
     public List<Goal> getGoals() {
         return goals;
-    }
-
-    public Observable<Goal> getGoalsObservable() {
-        return Observable.fromIterable(
-                Optional.ofNullable(goals)
-                        .orElse(Collections.emptyList())
-        );
     }
 
     public void setGoals(List<Goal> goals) {

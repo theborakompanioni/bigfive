@@ -24,9 +24,9 @@ public class BigFiveItem {
     private String description;
 
     @JoinTable(name = "list_items", joinColumns = {
-            @JoinColumn(name = "list_item_id", referencedColumnName = "list_item_id", columnDefinition = "integer")
+            @JoinColumn(name = "list_item_id", referencedColumnName = "list_item_id", columnDefinition = "bigint")
     }, inverseJoinColumns = {
-            @JoinColumn(name = "list_id", referencedColumnName = "list_id", columnDefinition = "integer")
+            @JoinColumn(name = "list_id", referencedColumnName = "list_id", columnDefinition = "bigint")
     })
     @ManyToMany(fetch = FetchType.LAZY)
     private List<BigFiveList> list = Collections.emptyList();

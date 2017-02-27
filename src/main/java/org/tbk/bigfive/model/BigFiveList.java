@@ -22,17 +22,17 @@ public class BigFiveList {
     private String description;
 
     @JoinTable(name = "list_items", joinColumns = {
-            @JoinColumn(name = "list_id", referencedColumnName = "list_id", columnDefinition = "integer")
+            @JoinColumn(name = "list_id", referencedColumnName = "list_id", columnDefinition = "bigint")
     }, inverseJoinColumns = {
-            @JoinColumn(name = "list_item_id", referencedColumnName = "list_item_id", columnDefinition = "integer")
+            @JoinColumn(name = "list_item_id", referencedColumnName = "list_item_id", columnDefinition = "bigint")
     })
     @ManyToMany(fetch = FetchType.EAGER)
     private List<BigFiveItem> items = Collections.emptyList();
 
     @JoinTable(name = "user_lists", joinColumns = {
-            @JoinColumn(name = "list_id", referencedColumnName = "list_id", columnDefinition = "integer")
+            @JoinColumn(name = "list_id", referencedColumnName = "list_id", columnDefinition = "bigint")
     }, inverseJoinColumns = {
-            @JoinColumn(name = "user_id", referencedColumnName = "user_id", columnDefinition = "integer")
+            @JoinColumn(name = "user_id", referencedColumnName = "user_id", columnDefinition = "bigint")
     })
     @ManyToMany(fetch = FetchType.LAZY)
     private List<User> user = Collections.emptyList();

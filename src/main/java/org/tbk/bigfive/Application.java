@@ -61,16 +61,4 @@ public class Application {
 
         };
     }
-
-    @Bean
-    public CommandLineRunner demo(DemoService demoService) {
-        return new CommandLineRunner() {
-
-            @Override
-            @Transactional
-            public void run(String... args) throws Exception {
-                demoService.printGoalsOfDemoUser();
-            }
-        };
-    }
 }

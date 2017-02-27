@@ -24,9 +24,9 @@ public class Goal {
     private String description;
 
     @JoinTable(name = "user_goals", joinColumns = {
-            @JoinColumn(name = "goal_id", referencedColumnName = "goal_id", columnDefinition = "integer")
+            @JoinColumn(name = "goal_id", referencedColumnName = "goal_id", columnDefinition = "bigint")
     }, inverseJoinColumns = {
-            @JoinColumn(name = "user_id", referencedColumnName = "user_id", columnDefinition = "integer")
+            @JoinColumn(name = "user_id", referencedColumnName = "user_id", columnDefinition = "bigint")
     })
     @ManyToMany(fetch = FetchType.LAZY)
     private List<User> user;
