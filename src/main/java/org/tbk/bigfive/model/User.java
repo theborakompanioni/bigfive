@@ -30,6 +30,14 @@ public class User {
     @ManyToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Goal> goals = Collections.emptyList();
 
+    @JoinTable(name = "user_lists", joinColumns = {
+            @JoinColumn(name = "user_id", referencedColumnName = "user_id", columnDefinition = "integer")
+    }, inverseJoinColumns = {
+            @JoinColumn(name = "list_id", referencedColumnName = "list_id", columnDefinition = "integer")
+    })
+    @ManyToMany(fetch = FetchType.LAZY)
+    private List<BigFiveList> lists = Collections.emptyList();
+
     @ElementCollection(fetch = FetchType.EAGER)
     private List<String> authorities = Collections.emptyList();
 

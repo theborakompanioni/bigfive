@@ -57,4 +57,7 @@ public class Goal {
                 id, name, user);
     }
 
+    public String getDescription() {
+        return description;
+    }
 }
