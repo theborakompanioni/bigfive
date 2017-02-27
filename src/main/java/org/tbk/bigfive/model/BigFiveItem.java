@@ -7,6 +7,9 @@ import java.util.Optional;
 
 @Entity
 @Table(name = "list_item")
+@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
+@DiscriminatorColumn(name = "type", discriminatorType = DiscriminatorType.CHAR, columnDefinition = "default 'I'")
+@DiscriminatorValue("I")
 public class BigFiveItem {
 
     @Id
@@ -25,10 +28,19 @@ public class BigFiveItem {
     }, inverseJoinColumns = {
             @JoinColumn(name = "list_id", referencedColumnName = "list_id", columnDefinition = "integer")
     })
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.LAZY)
     private List<BigFiveList> list = Collections.emptyList();
 
+    @JoinColumn(name = "user_id")
+    @ManyToOne(fetch = FetchType.LAZY)
+    private User owner;
+
     protected BigFiveItem() {
+    }
+
+    public BigFiveItem(User owner, String name) {
+        this.owner = owner;
+        this.name = name;
     }
 
     @Override
@@ -63,5 +75,9 @@ public class BigFiveItem {
 
     public Long getId() {
         return id;
+    }
+
+    public User getOwner() {
+        return owner;
     }
 }

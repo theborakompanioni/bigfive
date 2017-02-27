@@ -8,5 +8,7 @@ public interface BigFiveItemRepository extends JpaRepository<BigFiveItem, Long> 
 
     List<BigFiveItem> findByName(String name);
 
+    List<BigFiveItem> findByOwner(User owner);
+
     List<BigFiveItem> findByList(BigFiveList list);
 }

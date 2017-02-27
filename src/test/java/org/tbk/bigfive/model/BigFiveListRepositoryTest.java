@@ -11,7 +11,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.junit4.SpringRunner;
-import org.springframework.transaction.support.TransactionTemplate;
 import org.tbk.bigfive.config.TestDbConfig;
 
 import java.util.Collections;
@@ -42,8 +41,9 @@ public class BigFiveListRepositoryTest {
 
     @Test
     public void save() throws Exception {
-        final BigFiveList bigFiveList = new BigFiveList();
-        bigFiveList.setName("test1");
+        User user1 = new User("test", "", Collections.emptyList());
+        userRepository.save(user1);
+        final BigFiveList bigFiveList = new BigFiveList(user1, "list1");
 
         sut.saveAndFlush(bigFiveList);
 
@@ -53,8 +53,10 @@ public class BigFiveListRepositoryTest {
 
     @Test
     public void findByName() throws Exception {
-        final BigFiveList bigFiveList = new BigFiveList();
-        bigFiveList.setName("test1");
+        User user1 = new User("test", "", Collections.emptyList());
+        userRepository.save(user1);
+
+        final BigFiveList bigFiveList = new BigFiveList(user1, "list1");
         sut.saveAndFlush(bigFiveList);
 
         final List<BigFiveList> byName = sut.findByName(bigFiveList.getName());
@@ -70,29 +72,28 @@ public class BigFiveListRepositoryTest {
         final List<User> users = Lists.newArrayList(user1, user2);
         userRepository.save(users);
 
-        final BigFiveList bigFiveList = new BigFiveList();
-        bigFiveList.setName("test1");
+        final BigFiveList bigFiveList = new BigFiveList(user1, "list1");
         bigFiveList.setUser(users);
 
         sut.saveAndFlush(bigFiveList);
 
-        final List<BigFiveList> byUser = sut.findByUser(user1);
+        final List<BigFiveList> byUser = sut.findByUser(user2);
         assertThat(byUser, hasSize(greaterThan(0)));
     }
 
     @Test
     public void findByItem() throws Exception {
-        BigFiveItem item1 = new BigFiveItem();
-        item1.setName("item1");
-        BigFiveItem item2 = new BigFiveItem();
-        item2.setName("item2");
+        User user1 = new User("test", "", Collections.emptyList());
+        userRepository.save(user1);
+
+        BigFiveItem item1 = new BigFiveItem(user1, "item1");
+        BigFiveItem item2 = new BigFiveItem(user1, "item2");
 
         final List<BigFiveItem> items = Lists.newArrayList(item1, item2);
 
         itemRepository.save(items);
 
-        final BigFiveList bigFiveList = new BigFiveList();
-        bigFiveList.setName("test1");
+        final BigFiveList bigFiveList = new BigFiveList(user1, "list1");
         bigFiveList.setItems(items);
 
         sut.saveAndFlush(bigFiveList);
@@ -101,4 +102,19 @@ public class BigFiveListRepositoryTest {
         assertThat(byUser, hasSize(greaterThan(0)));
     }
 
+    @Test
+    public void findByOwner() throws Exception {
+        User user1 = new User("test", "", Collections.emptyList());
+        User user2 = new User("test2", "", Collections.emptyList());
+
+        final List<User> users = Lists.newArrayList(user1, user2);
+        userRepository.save(users);
+
+        final BigFiveList bigFiveList = new BigFiveList(user1, "list1");
+
+        sut.save(bigFiveList);
+
+        final List<BigFiveList> byUser = sut.findByOwner(user1);
+        assertThat(byUser, hasSize(greaterThan(0)));
+    }
 }

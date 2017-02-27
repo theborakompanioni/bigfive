@@ -37,7 +37,16 @@ public class BigFiveList {
     @ManyToMany(fetch = FetchType.LAZY)
     private List<User> user = Collections.emptyList();
 
+    @JoinColumn(name = "user_id")
+    @ManyToOne(fetch = FetchType.LAZY)
+    private User owner;
+
     protected BigFiveList() {
+    }
+
+    public BigFiveList(User owner, String name) {
+        this.owner = owner;
+        this.name = name;
     }
 
     @Override
@@ -81,5 +90,9 @@ public class BigFiveList {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public User getOwner() {
+        return owner;
     }
 }
