@@ -4,6 +4,7 @@ import com.google.common.collect.Lists;
 import lombok.Data;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -24,6 +25,12 @@ public class Goal {
 
     @Column(name = "desc")
     private String description;
+
+    @Column(name = "accomplished")
+    private boolean accomplished = false;
+
+    @Column(name = "accomplished_date")
+    private LocalDateTime accomplishedDate;
 
     @JoinTable(name = "user_goals", joinColumns = {
             @JoinColumn(name = "goal_id", referencedColumnName = "goal_id", columnDefinition = "bigint")

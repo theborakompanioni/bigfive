@@ -4,6 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceBuilder;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.system.ApplicationPidFileWriter;
@@ -12,12 +13,17 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Profile;
-import org.springframework.transaction.annotation.Transactional;
-import org.tbk.bigfive.demo.DemoService;
+import org.springframework.data.jpa.convert.threeten.Jsr310JpaConverters;
 
 import javax.sql.DataSource;
 import java.util.Arrays;
 
+@EntityScan(
+        basePackageClasses = {
+                Application.class,
+                Jsr310JpaConverters.class
+        }
+)
 @SpringBootApplication
 public class Application {
     private static final Logger log = LoggerFactory.getLogger(Application.class);
