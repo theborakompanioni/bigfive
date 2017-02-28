@@ -1,10 +1,13 @@
 package org.tbk.bigfive.model;
 
+import lombok.Data;
+
 import javax.persistence.*;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
+@Data
 @Entity
 @Table(name = "list_item")
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
@@ -46,38 +49,11 @@ public class BigFiveItem {
     @Override
     public String toString() {
         return String.format(
-                "BigFiveItem[id=%d, name='%s', list=%s]",
-                id, name, list);
+                "BigFiveItem[id=%d, name='%s']",
+                id, name);
     }
 
     public String getName() {
         return name;
-    }
-
-    public BigFiveList getList() {
-        return Optional.ofNullable(list)
-                .flatMap(user -> user.stream().findFirst())
-                .orElse(null);
-    }
-
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public User getOwner() {
-        return owner;
     }
 }

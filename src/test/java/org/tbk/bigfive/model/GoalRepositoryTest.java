@@ -68,7 +68,7 @@ public class GoalRepositoryTest {
 
     @Test
     public void findOne() throws Exception {
-        Goal findOne = goalRepository.findOne(1L);
+        Goal findOne = goalRepository.findOne(this.goal1.getId());
         assertThat(findOne, is(notNullValue()));
         assertThat(findOne.getName(), is(equalTo(goal1.getName())));
     }

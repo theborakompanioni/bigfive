@@ -1,5 +1,7 @@
 package org.tbk.bigfive.demo;
 
+import com.google.common.base.Supplier;
+import com.google.common.base.Suppliers;
 import com.google.common.collect.Lists;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.slf4j.Logger;
@@ -7,6 +9,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.tbk.bigfive.model.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static java.util.Objects.requireNonNull;
@@ -19,6 +22,9 @@ public class DemoService {
     private final GoalRepository goalRepository;
     private final BigFiveListRepository listRepository;
     private final BigFiveItemRepository itemRepository;
+
+    private final Supplier<DemoUser.DemoUserBuilder> demoUserBuilderSupplier = Suppliers
+            .memoize(this::createDemoUserBuilder);
 
     public DemoService(PasswordEncoder passwordEncoder,
                        UserRepository userRepository,
@@ -33,7 +39,7 @@ public class DemoService {
     }
 
     public void printGoalsOfDemoUser() {
-        User demoUser = this.getOrCreateDemoUser();
+        User demoUser = this.getOrCreateDemoUser().getOrigin();
 
         log.info("Goals of demo user:");
         log.info("-------------------------------");
@@ -43,15 +49,22 @@ public class DemoService {
         log.info("");
     }
 
-    public User getOrCreateDemoUser() {
-        return userRepository.findByName("demo")
+    public DemoUser getOrCreateDemoUser() {
+        final User user = userRepository.findByName("demo")
                 .stream()
                 .findFirst()
-                .orElseGet(this::createDemoUser);
+                .orElseGet(() -> createDemoUser().getOrigin());
+
+        return demoUserBuilderSupplier.get()
+                .origin(user)
+                .build();
     }
 
-    private User createDemoUser() {
-        User demoUser = new User("demo", passwordEncoder.encode("demo"), Lists.newArrayList("ROLE_ADMIN", "ROLE_USER"));
+    private DemoUser createDemoUser() {
+        final DemoUser.DemoUserBuilder demoUserBuilder = demoUserBuilderSupplier.get();
+        final ArrayList<String> authorities = Lists.newArrayList("ROLE_ADMIN", "ROLE_USER");
+
+        User demoUser = new User(demoUserBuilder.name(), demoUserBuilder.encryptedPassword(), authorities);
 
         userRepository.save(demoUser);
         log.info("Created demo user: {}", demoUser);
@@ -62,12 +75,23 @@ public class DemoService {
         goalRepository.save(new Goal(demoUser, "Goal4", "Description4"));
         goalRepository.save(new Goal(demoUser, "Goal5", "Description5"));
 
-        return demoUser;
+        return demoUserBuilder
+                .origin(demoUser)
+                .build();
+    }
+
+    private DemoUser.DemoUserBuilder createDemoUserBuilder() {
+        final String username = "demo";
+        final String password = "demo";
+        return DemoUser.builder()
+                .name(username)
+                .password(password)
+                .encryptedPassword(passwordEncoder.encode(password));
     }
 
 
     public void createDemoLists() {
-        User demoUser = getOrCreateDemoUser();
+        User demoUser = getOrCreateDemoUser().getOrigin();
         final boolean demoUserHasItems = !demoUser.getLists().isEmpty();
 
         if (!demoUserHasItems) {
@@ -100,4 +124,5 @@ public class DemoService {
             listRepository.save(lists);
         }
     }
+
 }

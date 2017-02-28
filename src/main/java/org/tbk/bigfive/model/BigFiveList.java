@@ -1,11 +1,13 @@
 package org.tbk.bigfive.model;
 
 import com.google.common.collect.ImmutableList;
+import lombok.Data;
 
 import javax.persistence.*;
 import java.util.Collections;
 import java.util.List;
 
+@Data
 @Entity
 @Table(name = "list")
 public class BigFiveList {
@@ -56,18 +58,6 @@ public class BigFiveList {
                 id, name);
     }
 
-    public Long getId() {
-        return id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
     public List<BigFiveItem> getItems() {
         return ImmutableList.copyOf(items);
     }
@@ -82,17 +72,5 @@ public class BigFiveList {
 
     public void setUser(List<User> user) {
         this.user = user == null ? Collections.emptyList() : ImmutableList.copyOf(user);
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public User getOwner() {
-        return owner;
     }
 }

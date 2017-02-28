@@ -1,6 +1,7 @@
 package org.tbk.bigfive.model;
 
 import com.google.common.collect.Lists;
+import lombok.Data;
 
 import javax.persistence.*;
 import java.util.List;
@@ -8,6 +9,7 @@ import java.util.Optional;
 
 import static java.util.Objects.requireNonNull;
 
+@Data
 @Entity
 @Table(name = "goal")
 public class Goal {
@@ -40,10 +42,6 @@ public class Goal {
         this.description = description;
     }
 
-    public String getName() {
-        return name;
-    }
-
     public User getUser() {
         return Optional.ofNullable(user)
                 .flatMap(user -> user.stream().findFirst())
@@ -55,9 +53,5 @@ public class Goal {
         return String.format(
                 "Goal[id=%d, name='%s', user=%s]",
                 id, name, user);
-    }
-
-    public String getDescription() {
-        return description;
     }
 }

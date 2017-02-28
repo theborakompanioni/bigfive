@@ -1,0 +1,8 @@
+spring.application.name: 'bigfive'
+spring.profiles.active: test
+
+app.name: bigfive (test)
+app.description: an app for named lists
+
+spring.jpa.database-platform: 'org.tbk.bigfive.sqlite.SQLiteDialect'
+spring.jpa.hibernate.ddl-auto: 'create-drop'

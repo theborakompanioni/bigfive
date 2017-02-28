@@ -3,8 +3,8 @@ package org.tbk.bigfive.config;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Primary;
 import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
-import org.springframework.test.context.TestPropertySource;
 
 import javax.sql.DataSource;
 import java.net.URISyntaxException;
@@ -13,6 +13,7 @@ import java.util.Properties;
 @Configuration
 public class TestDbConfig {
     @Bean
+    @Primary
     public DataSource dataSource() {
         DataSourceBuilder dataSourceBuilder = DataSourceBuilder.create();
         dataSourceBuilder.driverClassName("org.sqlite.JDBC");

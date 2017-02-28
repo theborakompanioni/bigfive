@@ -35,7 +35,7 @@ public class User {
     }, inverseJoinColumns = {
             @JoinColumn(name = "list_id", referencedColumnName = "list_id", columnDefinition = "bigint")
     })*/
-    @OneToMany(fetch=FetchType.LAZY, cascade = CascadeType.ALL, mappedBy="owner")
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "owner")
     private List<BigFiveList> lists = Collections.emptyList();
 
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
@@ -43,6 +43,10 @@ public class User {
     private List<String> authorities = Collections.emptyList();
 
     protected User() {
+    }
+
+    public User(String name, String password) {
+        this(name, password, Collections.emptyList());
     }
 
     public User(String name, String password, List<String> authorities) {
