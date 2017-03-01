@@ -4,7 +4,6 @@ spring.profiles.active: production
 spring.jpa.database-platform: 'org.tbk.bigfive.sqlite.SQLiteDialect'
 spring.jpa.hibernate.ddl-auto: 'update'
 
-
 app.name: bigfive
 app.description: an app for named lists
 

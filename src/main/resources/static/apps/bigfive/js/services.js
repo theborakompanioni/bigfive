@@ -1,4 +1,4 @@
-angular.module('starter.services', [])
+angular.module('starter.services', ['restangular'])
 
   .factory('Chats', function () {
     // Might use a resource here that returns a JSON array
@@ -50,51 +50,16 @@ angular.module('starter.services', [])
   })
 
 
-  .factory('Goals', function () {
-    // Might use a resource here that returns a JSON array
-
-    // Some fake testing data
-    var goals = [{
-      id: 0,
-      name: 'Ben Sparrow',
-      description: 'You on your way?',
-      img: 'img/ben.png'
-    }, {
-      id: 1,
-      name: 'Max Lynx',
-      description: 'Hey, it\'s me',
-      img: 'img/max.png'
-    }, {
-      id: 2,
-      name: 'Adam Bradleyson',
-      description: 'I should buy a boat',
-      img: 'img/adam.jpg'
-    }, {
-      id: 3,
-      name: 'Perry Governor',
-      description: 'Look at my mukluks!',
-      img: 'img/perry.png'
-    }, {
-      id: 4,
-      name: 'Mike Harrington',
-      description: 'This is wicked good ice cream.',
-      img: 'img/mike.png'
-    }];
-
-    return {
-      all: function () {
-        return goals;
-      },
-      remove: function (chat) {
-        goals.splice(goals.indexOf(chat), 1);
-      },
-      get: function (goalId) {
-        for (var i = 0; i < goals.length; i++) {
-          if (goals[i].id === parseInt(goalId)) {
-            return goals[i];
-          }
+  .factory('Goals', ['Restangular', function (Restangular) {
+      return {
+        page: function (page, size) {
+          return Restangular.one('goal').get({
+            page: page >= 0 ? page : 0,
+            size: size >= 0 ? size : 10
+          });
+        },
+        get: function (goalId) {
+          return Restangular.one('goal', goalId).get();
         }
-        return null;
-      }
-    };
-  });
+      };
+    }]);

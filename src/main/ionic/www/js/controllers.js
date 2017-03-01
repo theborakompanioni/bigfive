@@ -28,15 +28,20 @@ angular.module('starter.controllers', [])
     //
     //$scope.$on('$ionicView.enter', function(e) {
     //});
+    $scope.goals = [];
+    Goals.page(0, 10).then(function (page) {
+      $scope.goals = page._embedded.goal;
+    });
 
-    $scope.goals = Goals.all();
     $scope.remove = function (goal) {
       Goals.remove(goal);
     };
   })
 
   .controller('GoalDetailCtrl', function ($scope, $stateParams, Goals) {
-    $scope.goal = Goals.get($stateParams.goalId);
+    Goals.get($stateParams.goalId).then(function (goal) {
+      $scope.goal = goal;
+    })
   })
 
   .controller('ChatDetailCtrl', function ($scope, $stateParams, Chats) {
