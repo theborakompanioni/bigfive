@@ -51,15 +51,39 @@ angular.module('starter.services', ['restangular'])
 
 
   .factory('Goals', ['Restangular', function (Restangular) {
-      return {
-        page: function (page, size) {
-          return Restangular.one('goal').get({
-            page: page >= 0 ? page : 0,
-            size: size >= 0 ? size : 10
+    return {
+      page: function (page, size) {
+        return Restangular.one('goal').get({
+          page: page >= 0 ? page : 0,
+          size: size >= 0 ? size : 10
+        });
+      },
+      get: function (goalId) {
+        return Restangular.one('goal', goalId).get();
+      }
+    };
+  }])
+  .factory('Users', ['Restangular', function (Restangular) {
+    return {
+      page: function (page, size) {
+        return Restangular.one('user').get({
+          page: page >= 0 ? page : 0,
+          size: size >= 0 ? size : 10
+        });
+      },
+      get: function (userId) {
+        return Restangular.one('user', userId).get()
+          .then(function (response) {
+            return response._embedded.user;
           });
-        },
-        get: function (goalId) {
-          return Restangular.one('goal', goalId).get();
-        }
-      };
-    }]);
+      },
+      findByName: function (name) {
+        return Restangular.oneUrl('user', '/user/search/findByName?name=' + name).get()
+      },
+      current: function () {
+        return this.findByName('demo').then(function (response) {
+          return response._embedded.user[0];
+        });
+      }
+    };
+  }]);

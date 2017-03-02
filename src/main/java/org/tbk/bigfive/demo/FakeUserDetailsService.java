@@ -1,10 +1,12 @@
 package org.tbk.bigfive.demo;
 
+import org.springframework.data.domain.Page;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.tbk.bigfive.Application;
 import org.tbk.bigfive.model.UserRepository;
 
 import java.util.List;
@@ -22,9 +24,9 @@ public class FakeUserDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        final List<org.tbk.bigfive.model.User> byName = userRepository.findByName(username);
+        final Page<org.tbk.bigfive.model.User> byName = userRepository.findByName(username, Application.standardPageRequest);
 
-        return byName.stream().findFirst()
+        return byName.getContent().stream().findFirst()
                 .map(user -> toUserDetails(user))
                 .orElseThrow(() -> new UsernameNotFoundException("user not found"));
     }
@@ -34,7 +36,7 @@ public class FakeUserDetailsService implements UserDetailsService {
                 .stream()
                 .map(SimpleGrantedAuthority::new)
                 .collect(toList());
-        
+
         return User.withUsername(user.getName())
                 .password(user.getPassword())
                 .authorities(authorities)

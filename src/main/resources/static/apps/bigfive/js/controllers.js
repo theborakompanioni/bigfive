@@ -2,7 +2,12 @@ angular.module('starter.controllers', [])
 
   .controller('DashCtrl', function ($scope) {
   })
-  .controller('ProfileCtrl', function ($scope) {
+  .controller('ProfileCtrl', function ($scope, Users) {
+
+    $scope.user = null;
+    Users.current().then(function (user) {
+      $scope.user = user;
+    });
   })
 
   .controller('ChatsCtrl', function ($scope, Chats) {

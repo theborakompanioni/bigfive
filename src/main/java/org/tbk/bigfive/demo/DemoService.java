@@ -6,7 +6,9 @@ import com.google.common.collect.Lists;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.tbk.bigfive.Application;
 import org.tbk.bigfive.model.*;
 
 import java.util.ArrayList;
@@ -43,14 +45,16 @@ public class DemoService {
 
         log.info("Goals of demo user:");
         log.info("-------------------------------");
-        goalRepository.findByUser(demoUser).stream()
+        goalRepository.findByUser(demoUser, Application.standardPageRequest)
+                .getContent().stream()
                 .map(Goal::toString)
                 .forEach(log::info);
         log.info("");
     }
 
     public DemoUser getOrCreateDemoUser() {
-        final User user = userRepository.findByName("demo")
+        final User user = userRepository.findByName("demo", Application.standardPageRequest)
+                .getContent()
                 .stream()
                 .findFirst()
                 .orElseGet(() -> createDemoUser().getOrigin());

@@ -1,20 +1,20 @@
 package org.tbk.bigfive.model;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.repository.query.Param;
 import org.springframework.data.rest.core.annotation.RepositoryRestResource;
-import org.tbk.bigfive.model.projection.ListWithOwnerProjection;
-
-import java.util.List;
 
 //@RepositoryRestResource(excerptProjection = ListWithOwnerProjection.class, collectionResourceRel = "list", path = "list")
 @RepositoryRestResource(collectionResourceRel = "list", path = "list")
 public interface BigFiveListRepository extends JpaRepository<BigFiveList, Long> {
 
-    List<BigFiveList> findByName(String name);
+    Page<BigFiveList> findByName(@Param("name") String name, Pageable pageable);
 
-    List<BigFiveList> findByItems(BigFiveItem item);
+    Page<BigFiveList> findByItems(BigFiveItem item, Pageable pageable);
 
-    List<BigFiveList> findByOwner(User owner);
+    Page<BigFiveList> findByOwner(User owner, Pageable pageable);
 
-    List<BigFiveList> findByUser(User user);
+    Page<BigFiveList> findByUser(User user, Pageable pageable);
 }

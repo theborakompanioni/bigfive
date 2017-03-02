@@ -11,6 +11,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.junit4.SpringRunner;
+import org.tbk.bigfive.Application;
 import org.tbk.bigfive.config.TestDbConfig;
 
 import java.util.Collections;
@@ -44,7 +45,8 @@ public class UserRepositoryTest {
         final List<User> users = Lists.newArrayList(user1, user2);
         userRepository.save(users);
 
-        final List<User> byName = userRepository.findByName(user2.getName());
+        final List<User> byName = userRepository.findByName(user2.getName(), Application.standardPageRequest)
+                .getContent();
         assertThat(byName, hasSize(greaterThan(0)));
     }
 
@@ -59,7 +61,8 @@ public class UserRepositoryTest {
         Goal goal1 = new Goal(user1, "goal1", "description1");
         goalRepository.save(goal1);
 
-        final List<User> byGoals = userRepository.findByGoals(goal1);
+        final List<User> byGoals = userRepository.findByGoals(goal1, Application.standardPageRequest)
+                .getContent();
         assertThat(byGoals, hasItem(equalTo(user1)));
     }
 

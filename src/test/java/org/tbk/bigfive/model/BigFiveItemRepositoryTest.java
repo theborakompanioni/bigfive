@@ -11,6 +11,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.junit4.SpringRunner;
+import org.tbk.bigfive.Application;
 import org.tbk.bigfive.config.TestDbConfig;
 
 import java.util.Collections;
@@ -62,7 +63,8 @@ public class BigFiveItemRepositoryTest {
 
         sut.saveAndFlush(item);
 
-        final List<BigFiveItem> byUser = sut.findByOwner(user1);
+        final List<BigFiveItem> byUser = sut.findByOwner(user1, Application.standardPageRequest)
+                .getContent();
         assertThat(byUser, hasSize(greaterThan(0)));
     }
 

@@ -5,6 +5,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 import org.springframework.validation.ValidationUtils;
 import org.springframework.validation.Validator;
+import org.tbk.bigfive.Application;
 
 @Component
 public class UserValidator implements Validator {
@@ -25,7 +26,7 @@ public class UserValidator implements Validator {
         if (user.getName().length() < 3 || user.getName().length() > 32) {
             errors.rejectValue("username", "Size.userForm.username");
         }
-        if (!userRepository.findByName(user.getName()).isEmpty()) {
+        if (userRepository.findByName(user.getName(), Application.standardPageRequest).hasContent()) {
             errors.rejectValue("username", "Duplicate.userForm.username");
         }
 

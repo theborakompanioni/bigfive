@@ -12,6 +12,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.junit4.SpringRunner;
+import org.tbk.bigfive.Application;
 import org.tbk.bigfive.config.TestDbConfig;
 
 import java.util.Collections;
@@ -75,13 +76,15 @@ public class GoalRepositoryTest {
 
     @Test
     public void findByName() throws Exception {
-        final List<Goal> byUser = goalRepository.findByName(goal1.getName());
+        final List<Goal> byUser = goalRepository.findByName(goal1.getName(), Application.standardPageRequest)
+                .getContent();
         assertThat(byUser, hasSize(greaterThan(0)));
     }
 
     @Test
     public void findByUser() throws Exception {
-        final List<Goal> byUser = goalRepository.findByUser(user1);
+        final List<Goal> byUser = goalRepository.findByUser(user1, Application.standardPageRequest)
+                .getContent();
         assertThat(byUser, hasSize(1));
     }
 

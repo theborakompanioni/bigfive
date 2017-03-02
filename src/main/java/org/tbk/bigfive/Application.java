@@ -13,6 +13,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Profile;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.convert.threeten.Jsr310JpaConverters;
 
 import javax.sql.DataSource;
@@ -27,7 +28,7 @@ import java.util.Arrays;
 @SpringBootApplication
 public class Application {
     private static final Logger log = LoggerFactory.getLogger(Application.class);
-
+    public static final PageRequest standardPageRequest = new PageRequest(0, 10);
 
     public static void main(String[] args) {
         new SpringApplicationBuilder()

@@ -2,7 +2,9 @@ package org.tbk.bigfive.config;
 
 import com.google.common.reflect.ClassPath;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.rest.core.config.RepositoryRestConfiguration;
 import org.springframework.data.rest.webmvc.config.RepositoryRestConfigurerAdapter;
 import org.tbk.bigfive.model.Goal;
