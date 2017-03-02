@@ -2,7 +2,7 @@
   <ion-content>
     <ion-list>
       <ion-item class="item-remove-animate item-avatar item-icon-right" ng-repeat="goal in goals" type="item-text-wrap" href="#/tab/goals/{{goal.id}}">
-        <img ng-src="{{goal.img}}">
+        <img ng-src="{{'http://lorempixel.com/g/100/100/?' + goal.id}}">
         <h2>{{goal.name}}</h2>
         <p>{{goal.description}}</p>
         <i class="icon ion-chevron-right icon-accessory"></i>
