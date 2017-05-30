@@ -1,10 +1,18 @@
 buildscript {
     repositories {
-        mavenCentral()
+        jcenter()
     }
     dependencies {
-        classpath("org.springframework.boot:spring-boot-gradle-plugin:1.5.3.RELEASE")
+        classpath('org.springframework.boot:spring-boot-gradle-plugin:1.5.3.RELEASE')
     }
+}
+
+plugins {
+    id 'nebula.project' version '3.3.0'
+    id 'nebula.lint' version '7.2.0'
+    id 'nebula.release' version '4.2.0'
+    id 'nebula.dependency-lock' version '4.9.3'
+    id 'nebula.info' version '3.5.2'
 }
 
 apply plugin: 'java'
@@ -38,8 +46,8 @@ tasks.withType(Test) {
 }
 
 sourceSets {
-    main.java.srcDir "src/main/java"
-    test.java.srcDir "src/test/java"
+    main.java.srcDir 'src/main/java'
+    test.java.srcDir 'src/test/java'
 }
 
 test {
@@ -71,32 +79,32 @@ repositories {
 
 dependencies {
     // tag::jetty[]
-    compile("org.springframework.boot:spring-boot-starter-web") {
-        exclude module: "spring-boot-starter-tomcat"
+    compile('org.springframework.boot:spring-boot-starter-web') {
+        exclude module: 'spring-boot-starter-tomcat'
     }
-    compile("org.springframework.boot:spring-boot-starter-jetty")
+    compile('org.springframework.boot:spring-boot-starter-jetty')
     // end::jetty[]
 
-    compile("com.fasterxml.jackson.datatype:jackson-datatype-hibernate5:2.8.7")
+    compile('com.fasterxml.jackson.datatype:jackson-datatype-hibernate5:2.8.7')
 
-    compile("org.springframework.boot:spring-boot-starter-data-rest")
-    compile("org.springframework.boot:spring-boot-starter-data-jpa")
-    compile("com.zaxxer:HikariCP:2.6.2") {
-        exclude group: "org.slf4j", module: "slf4j-api"
+    compile('org.springframework.boot:spring-boot-starter-data-rest')
+    compile('org.springframework.boot:spring-boot-starter-data-jpa')
+    compile('com.zaxxer:HikariCP:2.6.2') {
+        exclude group: 'org.slf4j', module: 'slf4j-api'
     }
-    compile("org.xerial:sqlite-jdbc:3.16.1")
+    compile('org.xerial:sqlite-jdbc:3.16.1')
 
-    compile("io.reactivex.rxjava2:rxjava:2.0.5")
+    compile('io.reactivex.rxjava2:rxjava:2.0.5')
 
-    compile("org.springframework.boot:spring-boot-starter-security")
-    compile("org.springframework.boot:spring-boot-starter-actuator")
-    compile("org.springframework.boot:spring-boot-devtools")
+    compile('org.springframework.boot:spring-boot-starter-security')
+    compile('org.springframework.boot:spring-boot-starter-actuator')
+    compile('org.springframework.boot:spring-boot-devtools')
 
-    compile("com.google.guava:guava:19.0")
-    compile("org.apache.commons:commons-lang3:3.5")
-    compileOnly("org.projectlombok:lombok:1.16.14")
+    compile('com.google.guava:guava:19.0')
+    compile('org.apache.commons:commons-lang3:3.5')
+    compileOnly('org.projectlombok:lombok:1.16.14')
 
-    testCompile("org.springframework.boot:spring-boot-starter-test")
+    testCompile('org.springframework.boot:spring-boot-starter-test')
     // temporarily disabled to focus on sqlite
-    //testCompile("com.h2database:h2")
+    //testCompile('com.h2database:h2')
 }
