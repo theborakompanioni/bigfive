@@ -3,7 +3,7 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath("org.springframework.boot:spring-boot-gradle-plugin:1.5.1.RELEASE")
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:1.5.3.RELEASE")
     }
 }
 
@@ -81,7 +81,7 @@ dependencies {
 
     compile("org.springframework.boot:spring-boot-starter-data-rest")
     compile("org.springframework.boot:spring-boot-starter-data-jpa")
-    compile("com.zaxxer:HikariCP:2.6.0") {
+    compile("com.zaxxer:HikariCP:2.6.2") {
         exclude group: "org.slf4j", module: "slf4j-api"
     }
     compile("org.xerial:sqlite-jdbc:3.16.1")
